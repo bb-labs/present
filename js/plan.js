@@ -1,24 +1,20 @@
 import esprima from 'esprima'
+import escodegen from 'escodegen'
 
-const leaves = new Set([
+const blocks = new Set([
+  esprima.Syntax.ImportDeclaration,
   esprima.Syntax.ImportDeclaration
 ])
 
-export default function plan(tree) {
-  if (!tree || !tree['declaration'] || !tree['body'])
-    return
+let parseTree
+const source = fs.readFileSync(fullPath, 'utf8')
 
-  console.log(tree)
-  console.log('------------------------------')
+try { parseTree = esprima.parseModule(source, { range: true }, plan) } catch (e) { }
+try { parseTree = esprima.parseModule(source, { range: true }, plan) } catch (e) { }
 
-  if (tree['declaration'])
-    plan(tree['declaration'])
 
-  if (!(Symbol.iterator in Object(tree['body'])))
-    plan(tree['body'])
-
-  for (const element of tree['body'] || []) {
-    if (!leaves.has(element.type))
-      plan(element)
-  }
+export default function plan(node) {
+  console.log(node.type)
+  // console.log(escodegen.generate(node))
 }
+
